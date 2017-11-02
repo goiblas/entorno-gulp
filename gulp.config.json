@@ -1,0 +1,29 @@
+{
+    "templates": {
+        "src": "src/templates/pages/*.html",
+        "folder": "src/templates",
+        "watch": "src/templates/**/*.html",
+        "dest": "dist"
+    },
+    "scss": {
+        "src": "src/scss/*.scss",
+        "watch": "src/scss/**/*.scss",
+        "dest": "dist/css"
+    },
+    "js": {
+        "src": "src/js/*.js",
+        "name": "app.js",
+        "watch": "src/js/**/*.js",
+        "dest": "dist/js"
+    },
+    "img": {
+        "src": "src/img/**/*.*",
+        "dest": "dist/img"
+    },
+    "plugins": {
+        "src": [
+            "node_modules/jquery/dist/jquery.min.js"
+        ],
+        "dest": "dist/js"
+    }
+}

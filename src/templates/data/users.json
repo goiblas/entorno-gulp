@@ -1,0 +1,24 @@
+{
+    "alumnos":[
+        {
+            "name": "John Doe",
+            "email": "john.doe@gmail.com",
+            "phone": "555-1212"
+        },
+        {
+            "name": "John Doeasdfasd",
+            "email": "john.doe@gmail.com",
+            "phone": "555-1212"
+        },
+        {
+            "name": "John Doeasdf",
+            "email": "john.doe@gmail.com",
+            "phone": "555-1212"
+        },
+        {
+            "name": "John Doae",
+            "email": "john.doe@gmail.com",
+            "phone": "555-1212"
+        }
+    ] 
+}

@@ -1,0 +1,14 @@
+<p>You are here: {{page}}</p>
+<hr>
+<h1>titulo</h1>
+
+{{#repeat 5}}
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ducimus eligendi, reiciendis corporis quam facere quaerat
+    qui, aspernatur molestiae velit, vero ea quisquam laborum corrupti repudiandae totam, at aliquam esse.</p>
+ {{/repeat}}
+
+<ul class="breakfast-items">
+    {{#each users.alumnos}}
+    <li>{{ this.name }}</li>
+    {{/each}}
+</ul>
