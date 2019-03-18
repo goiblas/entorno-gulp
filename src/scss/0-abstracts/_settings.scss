@@ -1,0 +1,86 @@
+
+// sizes & layout
+// ---------------------------------------------------
+$size-page: 1178px;
+$size-narrow-page: 824px;
+$columns: 6;
+$space: 21px;
+$space-small: 10px;
+$gutter: 11.78;
+$height-header: 83px;
+
+
+// breakpoints
+// ---------------------------------------------------
+
+$breakpoints: (
+  s: 480px,
+  m: 778px,
+  l: 1024px,
+  xl: $size-page
+);
+
+$utils-breakpoint: (
+  mob: 'max-width: #{map-get($breakpoints, 'm' ) - 1}',
+  desk: 'min-width: #{map-get($breakpoints, 'm' )}'
+);
+
+
+// typography 
+// ---------------------------------------------------
+
+$f-family: 'Roboto', sans-serif;
+$f-line-height: 1.57;
+$f-header-line-height: 1.2;
+
+$font-sizes-desk: (
+    small: 12px,
+    1: 15px,
+    2: 18px,
+    3: 24px,
+    4: 29px,
+    5: 36px,
+    6: 40px
+);
+
+$font-sizes-mob: (
+    small: 12px,
+    1: 14px,
+    2: 16px,
+    3: 21px,
+    4: 24px,
+    5: 28px,
+    6: 28px
+);
+
+
+
+// colors
+// ---------------------------------------------------
+
+$c-main: #009082;
+$c-main-light: #21B9AB; 
+$c-main-lighten: #28DECD;
+
+$c-secondary-dark: #363636;
+$c-secondary: #505257;
+$c-secondary-light: #9497A1;
+$c-secondary-lighten: #EBECEE;
+
+
+$c-alert: #b50b19;
+$c-success: #427607;
+$c-warning: #ffae00;
+
+$c-text: $c-secondary;
+$c-text-light: $c-secondary-light;
+$c-link: $c-main;
+
+$border-radius: 3px;
+
+
+
+// Forms & buttons
+// ---------------------------------------------------
+$fields-height: 44px;
+$fields-padding: 16px;

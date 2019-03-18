@@ -1,0 +1,42 @@
+//mobile or desktop
+@mixin util-breakpoint($breakpoint) {
+  @if $breakpoint == 'mobile' {
+      @media (#{map-get($utils-breakpoint, 'mob')}) {
+          @content;
+      }
+  }
+  @if $breakpoint == 'desktop' {
+      @media (#{map-get($utils-breakpoint, 'desk')}) {
+          @content;
+      }
+  }
+}
+
+@mixin in-mobile {
+  @media (#{map-get($utils-breakpoint, 'mob')}) {
+      @content;
+  }
+}
+
+@mixin in-desktop {
+  @media (#{map-get($utils-breakpoint, 'desk')}) {
+      @content;
+  }
+}
+
+@mixin in-breakpoint($breakpoint) {
+  @media ( min-width: #{map-get($breakpoints, $breakpoint)}) {
+      @content;
+  }
+}
+
+// typography
+@mixin font-size($size: 1) {
+  font-size:  map-get($font-sizes-mob, $size) ;
+
+  @if $size != 'small' {
+      @include in-desktop {
+        font-size:  map-get($font-sizes-desk, $size);
+      }
+  }
+}

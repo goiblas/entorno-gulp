@@ -1,41 +1,30 @@
 
-@import 'base/settings';
+// Structure The 7–1 Pattern with Abstracts instead helpers
+// https://www.sitepoint.com/architecture-sass-project/ 
 
-body {
-    display: flex;
-    min-height: 100vh;
-    background: $c-grey;
-    font-family:Segoe, 'Segoe UI', 'DejaVu Sans', 'Trebuchet MS', Verdana, sans-serif;
-}
+// 0 - Abstracts Scss utils
+@import '0-abstracts/settings';
+@import '0-abstracts/mixins';
 
-.page {
-    max-width: 900px;
-    margin:0 auto;
-    padding: 120px;
-}
+// 1 - Base 
+@import '1-base/base';
+@import '1-base/typography';
+@import '1-base/utility-classes';
 
-.titulo {
-    font-size: 30px;
-    font-family: "Arial Black", Gadget, sans-serif;
-    font-family: 'Anton', sans-serif;
+// 2 - layout
+@import '2-layout/grid';
+@import '2-layout/header';
+@import '2-layout/footer';
 
-    text-transform: uppercase;
-    font-size: 40px;
-    padding: 5px 20px;
-    border-radius: -2px;
-    display: inline-block;
-    position: relative;
+// 3 - components
+@import '3-components/navigation';
+@import '3-components/forms';
+@import '3-components/buttons';
+@import '3-components/sidebar';
+@import '3-components/video-viewer';
+@import '3-components/cards';
 
-    &::after {
-        background-color: #10d1aa;
-        width: 100%;
-        height: 65%;
-        top: 0;
-        left: 0;
-        content: '';
-        display: block;
-        position: absolute;
-        z-index: -1;
-        transform: rotate(-1deg);
-    }
-}
+// 4 - pages
+@import '4-pages/home';
+@import '4-pages/catalog';
+@import '4-pages/inscription';

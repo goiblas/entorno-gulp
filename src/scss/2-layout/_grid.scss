@@ -1,0 +1,80 @@
+
+
+// containers
+.container {
+	width: 100%;
+	max-width: $size-page;
+    margin:0 auto;
+    padding-right: $space;
+    padding-left: $space;
+}
+.full-container {
+    padding-right: $space;
+    padding-left: $space;
+}
+.narrow-container {
+    max-width: $size-narrow-page;
+    margin:0 auto;
+    padding-right: $space;
+    padding-left: $space;
+}
+
+
+.page-wrapper {
+    max-width: 1600px;
+    margin:0 auto;
+    background-color: #fff;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.section {
+    padding-top: $space * 2;
+    padding-bottom: $space * 2;
+    
+    @include in-desktop {
+        padding-top: $space * 3;
+        padding-bottom: $space * 3;
+    }
+}
+
+// layouts
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+[class*="col-"] {
+    width: 100%;
+}
+
+@each $size, $screen-size in $breakpoints{
+    @for $i from 1 through $columns {
+        .col-#{$i} {
+            width: (100% * $i / $columns) - ($gutter / 2);
+        }
+    }
+    @media all and (min-width: $screen-size){
+        @for $i from 1 through $columns {
+         .col-#{$size}-#{$i} {
+            width: (100% * $i / $columns) - ($gutter / 2);
+         }
+     }
+   }
+}
+
+// 1-3
+$narrow-gutter: 12%;
+@for $i from 1 through 2 {
+    @include in-desktop {
+        .col-#{$i}-3 {
+            width: (100% * $i / 3) - ($narrow-gutter / 2);
+        }
+    }
+}
+
+
+.col-centered {
+    margin-left: auto;
+    margin-right: auto;
+}

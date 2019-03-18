@@ -1,0 +1,10 @@
+.main-footer {
+    @include font-size('small');
+    padding-bottom: $space;
+    &__line {
+        width: calc(100% + #{$space * 2});
+        transform: translateX(- $space);
+        border-top: 1px solid rgba($c-secondary-light, .3);
+        margin-bottom: $space;
+    }
+}

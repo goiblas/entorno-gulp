@@ -1,0 +1,36 @@
+
+body {
+    font-family: $f-family;
+    line-height: $f-line-height;
+	letter-spacing: 0.3px;
+	background-color: $c-secondary-light;
+	@include font-size(1);
+}
+
+// headers
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 700;
+	line-height: $f-header-line-height;
+	font-family: $f-family;
+	letter-spacing: 0.3px;
+	color: inherit;
+	color: $c-main;
+}
+
+h1 {
+	@include font-size(6);
+}
+h2 {
+	@include font-size(5);
+}
+h3 {
+	@include font-size(3);
+}
+h4, h5, h6 {
+	@include font-size(2);
+}

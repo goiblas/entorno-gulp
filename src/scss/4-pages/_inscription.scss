@@ -1,0 +1,22 @@
+.inscription-users {
+    position: relative;
+    margin-bottom: $space * 2;
+    @include in-desktop {
+        h2 {
+            @include font-size(4);
+        }
+        > div {
+            padding: $space 0;
+            margin-bottom: $space;
+        }
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 49%;
+            height: 100%;
+            width: 1px;
+            background-color: $c-secondary-light;
+        }
+    }
+}
