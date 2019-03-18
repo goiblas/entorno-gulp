@@ -1,11 +1,13 @@
 
+@import 'base/settings';
 
 body {
     display: flex;
     min-height: 100vh;
-    background: #fff;
-        font-family:Segoe, 'Segoe UI', 'DejaVu Sans', 'Trebuchet MS', Verdana, sans-serif;
+    background: $c-grey;
+    font-family:Segoe, 'Segoe UI', 'DejaVu Sans', 'Trebuchet MS', Verdana, sans-serif;
 }
+
 .page {
     max-width: 900px;
     margin:0 auto;
@@ -36,8 +38,4 @@ body {
         z-index: -1;
         transform: rotate(-1deg);
     }
-}
-
-body {
-    flex-direction: column;
 }

@@ -1,140 +1,159 @@
-import gulp from 'gulp';
-import plumber from 'gulp-plumber';
-import sass from 'gulp-sass';
-import config from './gulp.config.json';
-import browserSync from 'browser-sync';
-import panini from 'panini';
-import autoprefixer from 'gulp-autoprefixer';
-import runsequence from 'run-sequence';
-import babel from 'gulp-babel';
-import concat from 'gulp-concat';
-import del from 'del';
-import imagemin from 'gulp-imagemin';
+'use strict';
 
+import plugins       from 'gulp-load-plugins';
+import yargs         from 'yargs';
+import browser       from 'browser-sync';
+import gulp          from 'gulp';
+import panini        from 'panini';
+import rimraf        from 'rimraf';
+import yaml          from 'js-yaml';
+import fs            from 'fs';
+import webpackStream from 'webpack-stream';
+import webpack2      from 'webpack';
+import named         from 'vinyl-named';
+import autoprefixer  from 'autoprefixer';
 
-// generador de css
-gulp.task('css', () => {
-    return gulp.src(config.scss.src)
-        .pipe(plumber())
-        .pipe(sass({
-            outputStyle: 'extended'
-        }))
-        .pipe(gulp.dest(config.scss.dest))
-        .pipe(browserSync.reload({ stream: true }));
-});
-gulp.task('min:css', () => {
-    return gulp.src(config.scss.src)
-        .pipe(sass({
-            outputStyle: 'compressed',
-        }))
-        .pipe(autoprefixer({
-            browsers: [
-                'last 2 versions',
-                'ie >= 10'
-            ],
-            cascade: false
-        }))
-        .pipe(gulp.dest(config.scss.dest))
-});
+// Load all Gulp plugins into one variable
+const $ = plugins();
 
+// Check for --production flag
+const PRODUCTION = !!(yargs.argv.production);
 
-//generador de javascript
-gulp.task('js', () => {
-    return gulp.src(config.js.src)
-        .pipe(babel({
-            presets: ["env"]
-        }))
-        .pipe(concat(config.js.name))
-        .pipe(gulp.dest(config.js.dest))
-        .pipe(browserSync.reload({ stream: true }));
-});
-gulp.task('min:js', () => {
-    return gulp.src(config.js.src)
-        .pipe(babel({
-            presets: ["env"]
-        }))
-        .pipe(concat(config.js.name))
-        .pipe(gulp.dest(config.js.dest))
-});
+// Load settings from settings.yml
+const { COMPATIBILITY, PORT, PATHS } = loadConfig();
 
+function loadConfig() {
+  let ymlFile = fs.readFileSync('config.yml', 'utf8');
+  return yaml.load(ymlFile);
+}
 
-// generador de html
-gulp.task('html', () => {
-    gulp.src(config.templates.src)
-        .pipe(panini({
-            root: `${config.templates.folder}/pages`,
-            layouts: `${config.templates.folder}/layouts`,
-            partials: `${config.templates.folder}/partials`,
-            helpers: `${config.templates.folder}/helpers`,
-            data: `${config.templates.folder}/data`
-        }))
-        .pipe(gulp.dest(config.templates.dest))
-        .pipe(browserSync.reload({ stream: true }));
-});
+// Build the "dist" folder by running all of the below tasks
+gulp.task('build',
+ gulp.series(clean, gulp.parallel(pages, javascript, images, copy), sass));
 
+// Build the site, run the server, and watch for file changes
+gulp.task('default',
+  gulp.series('build', server, watch));
 
-// copio plugins
-gulp.task('plugins', () => {
-    return gulp.src(config.plugins.src)
-        .pipe(gulp.dest(config.plugins.dest))
-});
+// Delete the "dist" folder
+// This happens every time a build starts
+function clean(done) {
+  rimraf(PATHS.dist, done);
+}
 
+// Copy files out of the assets folder
+// This task skips over the "img", "js", and "scss" folders, which are parsed separately
+function copy() {
+  return gulp.src(PATHS.assets)
+    .pipe(gulp.dest(PATHS.dist));
+}
 
-// minimizar imagenes
-gulp.task('img', () => {
-    return gulp.src(config.img.src)
-        .pipe(gulp.dest(config.img.dest))
-});
-gulp.task('min:img', () =>
-    gulp.src(config.img.src)
-        .pipe(imagemin([
-            imagemin.gifsicle({ interlaced: true }),
-            imagemin.jpegtran({ progressive: true }),
-            imagemin.optipng({ optimizationLevel: 5 }),
-            imagemin.svgo({
-                plugins: [
-                    { removeViewBox: true },
-                    { cleanupIDs: false }
-                ]
-            })
-        ]))
-        .pipe(gulp.dest(config.img.dest))
-);
+// Copy page templates into finished HTML files
+function pages() {
+  return gulp.src('src/templates/pages/**/*.{html,hbs,handlebars}')
+    .pipe(panini({
+      root: 'src/templates/pages/',
+      layouts: 'src/templates/layouts/',
+      partials: 'src/templates/partials/',
+      data: 'src/templates/data/',
+      helpers: 'src/templates/helpers/'
+    }))
+    .pipe(gulp.dest(PATHS.dist));
+}
 
-// levanto el servidor
-gulp.task('dev', () => {
-    browserSync.init({
-        server: {
-            baseDir: config.templates.dest
-        },
-        ghostMode: false,
-        online: true
-    });
+// Load updated HTML templates and partials into Panini
+function resetPages(done) {
+  panini.refresh();
+  done();
+}
 
-    gulp.watch(config.scss.watch, ['css']);
-    gulp.watch(config.js.watch, ['js']);
-    gulp.watch([config.templates.watch], ['reset:html', 'html']);
-});
+// Compile Sass into CSS
+// In production, the CSS is compressed
+function sass() {
 
-gulp.task('clean', del.bind(null, ['dist']));
+  const postCssPlugins = [
+    // Autoprefixer
+    autoprefixer({ browsers: COMPATIBILITY }),
 
-// genero la carpeta de distribuación 
-gulp.task('build', ['clean'], () => {
-    runsequence('html', ['css', 'js', 'plugins', 'img'])
-});
+  ].filter(Boolean);
 
-// generar archivos definitivos
-gulp.task('deploy', ['clean'], () => {
-    runsequence('html', ['min:css', 'min:js', 'plugins', 'min:img'])
-})
+  return gulp.src('src/scss/*.scss')
+    .pipe($.sourcemaps.init())
+    .pipe($.sass({
+      includePaths: PATHS.sass
+    })
+      .on('error', $.sass.logError))
+    .pipe($.postcss(postCssPlugins))
+    .pipe($.if(PRODUCTION, $.cleanCss()))
+    .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
+    .pipe(gulp.dest(PATHS.dist + '/css'))
+    .pipe(browser.reload({ stream: true }));
+}
 
-// reset para el html
-gulp.task('reset:html', (done) => {
-    panini.refresh();
-    done();
-});
+let webpackConfig = {
+  mode: (PRODUCTION ? 'production' : 'development'),
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [ "@babel/preset-env" ],
+            compact: false
+          }
+        }
+      }
+    ]
+  },
+  devtool: !PRODUCTION && 'source-map'
+}
 
+// Combine JavaScript into one file
+// In production, the file is minified
+function javascript() {
+  return gulp.src(PATHS.entries)
+    .pipe(named())
+    .pipe($.sourcemaps.init())
+    .pipe(webpackStream(webpackConfig, webpack2))
+    .pipe($.if(PRODUCTION, $.uglify()
+      .on('error', e => { console.log(e); })
+    ))
+    .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
+    .pipe(gulp.dest(PATHS.dist + '/js'));
+}
 
-gulp.task('default', () => {
-    runsequence('build', ['dev'])
-});
+// Copy images to the "dist" folder
+// In production, the images are compressed
+function images() {
+  return gulp.src('src/img/**/*')
+    .pipe($.if(PRODUCTION, $.imagemin([
+      $.imagemin.jpegtran({ progressive: true }),
+    ])))
+    .pipe(gulp.dest(PATHS.dist + '/img'));
+}
+
+// Start a server with BrowserSync to preview the site in
+function server(done) {
+  browser.init({
+    server: PATHS.dist, port: PORT
+  }, done);
+}
+
+// Reload the browser with BrowserSync
+function reload(done) {
+  browser.reload();
+  done();
+}
+
+// Watch for changes to static assets, pages, Sass, and JavaScript
+function watch() {
+  gulp.watch(PATHS.assets, copy);
+  gulp.watch('src/templates/pages/**/*.html').on('all', gulp.series(pages, browser.reload));
+  gulp.watch('src/templates/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, browser.reload));
+  gulp.watch('src/templates/data/**/*.{js,json,yml}').on('all', gulp.series(resetPages, pages, browser.reload));
+  gulp.watch('src/templates/helpers/**/*.js').on('all', gulp.series(resetPages, pages, browser.reload));
+  gulp.watch('src/scss/**/*.scss').on('all', sass);
+  gulp.watch('src/js/**/*.js').on('all', gulp.series(javascript, browser.reload));
+  gulp.watch('src/img/**/*').on('all', gulp.series(images, browser.reload));
+}
