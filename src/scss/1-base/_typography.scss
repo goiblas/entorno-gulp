@@ -3,7 +3,6 @@ body {
     font-family: $f-family;
     line-height: $f-line-height;
 	letter-spacing: 0.3px;
-	background-color: $c-secondary-light;
 	@include font-size(1);
 }
 
