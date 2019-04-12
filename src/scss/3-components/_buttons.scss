@@ -1,46 +1,57 @@
-.button {
-    text-decoration: none;
+
+
+
+@mixin button-reset {
+    // button
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+
+    //a 
     display: inline-block;
-    padding: 0 $fields-padding;
-    color: #fff;
-    background-color: $c-main;
-    border-radius: $border-radius;
-    text-transform: uppercase;
-    line-height: $fields-height;
-    @include font-size('small');
-    letter-spacing: 1px;
-    text-shadow: rgba(0,0,0,.17) 0 1px;
-    border:0;
-    box-shadow: rgba(0,0,0,.18) 0 2px 3px; 
-    transition: background .25s;
-    &:focus, &:hover  {
-        outline: 0;
-        background-color: $c-main-light;
-    }
-    &:active {
-        transition: none;
-        background-color:$c-main;
-    }
+    text-align: center;
+    text-decoration: none;
 }
 
-.icon-button {
-    $size: 36px;
-    background-color: transparent;
-    border: 0;
-    width: $size;
-    height: $size;
-    background-repeat: no-repeat;
-    background-position: center center;
-    outline: none;
-    &--arrow-left {
-        background-image: url('../img portal/i-arrow-left.svg');
-    }
-    
-    &--arrow-right {
-        background-image: url('../img portal/i-arrow-right.svg');
-    }
 
-    &:disabled {
-        opacity: .4;
+
+.button {
+    @include button-reset;
+    letter-spacing: 0.3px;
+    border: solid 1px transparent;
+    border-radius: 2px;
+    background-image: 
+      linear-gradient(#FCFCFE, #E5E8ED),
+      linear-gradient(178deg, #E5E8EC,#A0A7B1);
+  
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  
+    box-shadow: rgba(#2b2d30, 0.12) 0 1px;
+    line-height: rem(35.16px);
+  
+    &:focus {
+      background-image: 
+        linear-gradient(#FCFCFE, #E5E8ED),
+        linear-gradient(178deg,  $c-main, $c-main);
+    
+      box-shadow: rgba($c-main, 0.4) 0 1px 2px;
     }
+  
+    &:active {
+      box-shadow: inset rgba(#2b2d30, 0.06) 0 5px 15px;
+      background-image: 
+        linear-gradient(#DEE1E6, #DEE1E6),
+        linear-gradient(178deg, #A0A7B1, #C8CBCF);
+      transition: all .3s;
+      transform: translateY(1px);
+      filter: saturate(150%);
+    }
+    // 
+    :focus:not(.focus-visible) {
+        box-shadow: none;
+      }
 }

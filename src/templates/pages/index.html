@@ -1,14 +1,20 @@
 <p>You are here: {{page}}</p>
 <hr>
-<h1>titulo</h1>
+<div class="foo">Dropdown</div>
 
-{{#repeat 5}}
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ducimus eligendi, reiciendis corporis quam facere quaerat
-    qui, aspernatur molestiae velit, vero ea quisquam laborum corrupti repudiandae totam, at aliquam esse.</p>
- {{/repeat}}
+<details class="dropdown details-reset details-overlay d-inline-block">
+  <summary class="btn" aria-haspopup="true">
+    Dropdown
+    <div class="dropdown-caret"></div>
+  </summary>
+
+<button class="button">
+  button
+</button>
+
 
 <ul class="breakfast-items">
     {{#each users.alumnos}}
-    <li>{{ this.name }}</li>
+    <li>{{ name }}</li>
     {{/each}}
 </ul>

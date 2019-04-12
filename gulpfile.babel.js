@@ -80,9 +80,9 @@ function sass() {
   return gulp.src('src/scss/*.scss')
     .pipe($.sourcemaps.init())
     .pipe($.sass({
-      includePaths: PATHS.sass
+      includePaths: [PATHS.sass, 'node_modules']
     })
-      .on('error', $.sass.logError))
+    .on('error', $.sass.logError))
     .pipe($.postcss(postCssPlugins))
     .pipe($.if(PRODUCTION, $.cleanCss()))
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
@@ -90,24 +90,6 @@ function sass() {
     .pipe(browser.reload({ stream: true }));
 }
 
-let webpackConfig = {
-  mode: (PRODUCTION ? 'production' : 'development'),
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [ "@babel/preset-env" ],
-            compact: false
-          }
-        }
-      }
-    ]
-  },
-  devtool: !PRODUCTION && 'source-map'
-}
 
 // Combine JavaScript into one file
 // In production, the file is minified
@@ -115,10 +97,13 @@ function javascript() {
   return gulp.src(PATHS.entries)
     .pipe(named())
     .pipe($.sourcemaps.init())
-    .pipe(webpackStream(webpackConfig, webpack2))
-    .pipe($.if(PRODUCTION, $.uglify()
-      .on('error', e => { console.log(e); })
-    ))
+    .pipe(webpackStream({
+      mode: PRODUCTION ? 'production': 'development',
+      devtool: PRODUCTION ? false : 'source-map'
+    }))
+    // .pipe($.if(PRODUCTION, $.uglify()
+    //   .on('error', e => { console.log(e); })
+    // ))
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/js'));
 }
