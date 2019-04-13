@@ -1,20 +1,14 @@
-<p>You are here: {{page}}</p>
-<hr>
-<div class="foo">Dropdown</div>
 
-<details class="dropdown details-reset details-overlay d-inline-block">
-  <summary class="btn" aria-haspopup="true">
-    Dropdown
-    <div class="dropdown-caret"></div>
-  </summary>
+<div class="container">
 
-<button class="button">
-  button
-</button>
-
-
-<ul class="breakfast-items">
-    {{#each users.alumnos}}
-    <li>{{ name }}</li>
-    {{/each}}
-</ul>
+    <p>You are here: {{page}}</p>
+    <h2>Title</h2>
+    
+    <ul>
+        {{#each users.players}}
+        <li>{{ name }}</li>
+        {{/each}}
+    </ul>
+    
+    <button class="button"> Button </button>
+</div>

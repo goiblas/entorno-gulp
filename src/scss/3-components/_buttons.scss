@@ -22,17 +22,21 @@
     @include button-reset;
     letter-spacing: 0.3px;
     border: solid 1px transparent;
-    border-radius: 2px;
+    border-radius: $border-radius;
+    padding-left: .8rem;
+    padding-right: .8rem;
+    line-height: 2.1rem;
     background-image: 
       linear-gradient(#FCFCFE, #E5E8ED),
       linear-gradient(178deg, #E5E8EC,#A0A7B1);
   
+    
     background-origin: border-box;
     background-clip: padding-box, border-box;
   
     box-shadow: rgba(#2b2d30, 0.12) 0 1px;
-    line-height: rem(35.16px);
-  
+    outline: none;
+
     &:focus {
       background-image: 
         linear-gradient(#FCFCFE, #E5E8ED),
@@ -46,12 +50,7 @@
       background-image: 
         linear-gradient(#DEE1E6, #DEE1E6),
         linear-gradient(178deg, #A0A7B1, #C8CBCF);
-      transition: all .3s;
-      transform: translateY(1px);
       filter: saturate(150%);
     }
-    // 
-    :focus:not(.focus-visible) {
-        box-shadow: none;
-      }
+
 }

@@ -11,10 +11,8 @@
 @import '0-abstracts/mixins';
 
 // 1 - Base 
-@import '1-base/normalize';
 @import '1-base/base';
 @import '1-base/typography';
-@import '1-base/utility-classes';
 
 // 2 - layout
 @import '2-layout/grid';
@@ -22,15 +20,11 @@
 @import '2-layout/footer';
 
 // 3 - components
-@import '3-components/navigation';
 @import '3-components/forms';
 @import '3-components/buttons';
-@import '3-components/sidebar';
-@import '3-components/video-viewer';
 @import '3-components/cards';
 
 // 4 - pages
 @import '4-pages/home';
-@import '4-pages/catalog';
-@import '4-pages/inscription';
+@import '4-pages/contact';
 
