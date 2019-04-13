@@ -4,7 +4,7 @@ PORT: 8000
 # Autoprefixer will make sure your CSS works with these browsers
 COMPATIBILITY:
   - "> 1%"
-  - "ie >= 9"
+  - "ie >= 11"
   - "ios >= 7"
 
 # Gulp will reference these paths when it copies files
@@ -17,8 +17,7 @@ PATHS:
     - "!src/scss/**/*"
   # Paths to Sass libraries, which can then be loaded with @import
   sass:
-    # - "node_modules/foundation-sites/scss"
-    # - "node_modules/motion-ui/src"
+    # - 
   # Paths to JavaScript entry points for webpack to bundle modules
   entries:
     - "src/js/app.js"
