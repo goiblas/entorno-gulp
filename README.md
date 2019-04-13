@@ -1,7 +1,6 @@
 # Cómo empezar
 
-Clonar el repositorio y acceder a la carpeta
-Ejecutar en consola, necesitas tener node instalado
+Clonar el repositorio y acceder a la carpeta y ejecutar en consola los siguientes comandos (necesitas tener node instalado)
 
 ```
 npm install
